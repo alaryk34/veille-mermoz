@@ -1,0 +1,397 @@
+<!DOCTYPE html><script type="application/json" id="cowork-artifact-meta">
+{
+  "name": "Veille Reglementaire Tertiaire Mermoz",
+  "schemaVersion": 1,
+  "description": "Veille réglementaire hebdomadaire des textes applicables au Bac Pro MCV, CAP EPC et Bac Pro Métiers de l'Accueil (lycée Mermoz, Béziers) : résumés accessibles, liens Légifrance/BOEN/Éduscol/académie de Montpellier, index incrémental par édition. Mise à jour chaque vendredi par tâche planifiée."
+}
+</script>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Veille réglementaire — Filières tertiaires — LP Jean Mermoz, Béziers</title>
+<style>
+  :root {
+    color-scheme: light;
+    --bleu: #14284b;
+    --azur: #0b5fb5;
+    --or: #d9a441;
+    --rouge: #c8102e;
+    --vert: #1f8a4c;
+    --violet: #7a2fa3;
+    --fond: #eef2f7;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    background: var(--fond);
+    color: #1a2332;
+    line-height: 1.55;
+  }
+
+  /* ===== EN-TÊTE ===== */
+  header {
+    background: linear-gradient(135deg, #14284b 0%, #1f3a6b 55%, #2b5aa0 100%);
+    color: #fff;
+  }
+  .tricolore { height: 6px; display: flex; }
+  .tricolore i { flex: 1; }
+  .tricolore i:nth-child(1){ background:#0055a4; }
+  .tricolore i:nth-child(2){ background:#ffffff; }
+  .tricolore i:nth-child(3){ background:#ef4135; }
+
+  .header-inner { display: flex; align-items: center; gap: 22px; padding: 22px 32px 24px; flex-wrap: wrap; }
+  .emblemes { display: flex; gap: 14px; align-items: center; }
+  .embleme {
+    background: #fff; border-radius: 12px; padding: 8px 10px;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+  .header-titre { flex: 1; min-width: 260px; }
+  .header-titre h1 { margin: 0 0 4px; font-size: 1.5rem; letter-spacing: 0.2px; }
+  .header-titre .sub { margin: 0; opacity: 0.9; font-size: 0.92rem; }
+  .header-titre .coord { margin: 4px 0 0; font-size: 0.82rem; opacity: 0.75; }
+
+  .meta-bar { display:flex; flex-wrap:wrap; gap:10px; padding: 0 32px 18px; }
+  .meta-bar span {
+    background: rgba(255,255,255,0.14); color:#fff;
+    padding: 5px 12px; border-radius: 999px; font-size: 0.8rem;
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+  .filieres-tags { display:flex; flex-wrap:wrap; gap:8px; padding: 0 32px 22px; }
+  .filieres-tags span { padding: 4px 12px; border-radius: 999px; font-size: 0.78rem; font-weight: 600; color:#fff; }
+  .ft-mcv { background: var(--azur); }
+  .ft-epc { background: var(--vert); }
+  .ft-acc { background: var(--violet); }
+  .ft-tr  { background: var(--or); color:#3a2a00; }
+
+  main { max-width: 1000px; margin: 0 auto; padding: 26px 20px 60px; }
+
+  /* ===== CARTES / ÉDITIONS REPLIABLES ===== */
+  section.card, details.edition {
+    background: #fff; border-radius: 14px; margin-bottom: 22px;
+    box-shadow: 0 2px 10px rgba(20,40,75,0.06);
+    border-top: 5px solid var(--bleu); overflow: hidden;
+  }
+  section.card { padding: 22px 26px; }
+  section.card.accent-index { border-top-color: var(--or); }
+  section.card.accent-method{ border-top-color: #64748b; }
+  details.edition { border-top-color: var(--azur); }
+
+  details.edition > summary {
+    cursor: pointer; list-style: none; padding: 18px 24px;
+    display: flex; align-items: center; gap: 14px;
+    background: linear-gradient(#ffffff,#f5f8fc); user-select: none;
+  }
+  details.edition > summary::-webkit-details-marker { display: none; }
+  details.edition > summary .chev {
+    transition: transform 0.2s; color: var(--azur); font-size: 1.1rem; font-weight: bold;
+  }
+  details.edition[open] > summary .chev { transform: rotate(90deg); }
+  details.edition > summary .ed-num {
+    background: var(--bleu); color:#fff; font-family: monospace; font-weight:700;
+    padding: 3px 10px; border-radius: 7px; font-size: 0.85rem;
+  }
+  details.edition > summary .ed-title { font-weight: 700; color: var(--bleu); font-size: 1.05rem; }
+  details.edition > summary .ed-date { color:#7a8798; font-size: 0.82rem; margin-left: auto; }
+  .edition-body { padding: 4px 26px 22px; }
+
+  h2 { color: var(--bleu); font-size: 1.2rem; margin: 0 0 4px; display:flex; align-items:center; gap:10px; }
+  .card > .lead, .edition-body > .lead { color:#5a6678; font-size:0.85rem; margin: 6px 0 14px; }
+
+  h3.groupe {
+    font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.6px;
+    margin: 20px 0 10px; padding: 5px 12px; border-radius: 7px; display:inline-block; font-weight:700;
+  }
+  h3.g-tr  { background:#fdf0d6; color:#8a5a00; }
+  h3.g-mcv { background:#dcecff; color:#0b4a8f; }
+  h3.g-epc { background:#e0f5e6; color:#1f6e2b; }
+  h3.g-acc { background:#f3e2ff; color:#6a1f9e; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+  th, td { text-align: left; padding: 9px 11px; border-bottom: 1px solid #eef1f5; vertical-align: top; }
+  th { background: linear-gradient(#f4f6fa,#eaeff6); color: #44546a; font-weight: 700; }
+  tbody tr:hover { background: #f7faff; }
+
+  .badge { display:inline-block; font-size:0.7rem; padding:2px 9px; border-radius:999px; font-weight:700; margin-bottom:4px; }
+  .b-tr { background:#fdf0d6; color:#8a5a00; }
+  .b-mcv{ background:#dcecff; color:#0b4a8f; }
+  .b-epc{ background:#e0f5e6; color:#1f6e2b; }
+  .b-acc{ background:#f3e2ff; color:#6a1f9e; }
+
+  .texte { margin-bottom: 16px; padding: 14px 16px; border-radius: 10px; background:#fafbfd; border-left: 4px solid #cdd6e2; }
+  .texte.t-tr  { border-left-color: var(--or); }
+  .texte.t-mcv { border-left-color: var(--azur); }
+  .texte.t-epc { border-left-color: var(--vert); }
+  .texte.t-acc { border-left-color: var(--violet); }
+  .texte .ref { font-weight: 700; color: var(--bleu); font-size: 0.98rem; }
+  .texte .date { color: #7a8798; font-size: 0.8rem; margin-left: 6px; }
+  .texte p.resume { margin: 6px 0 8px; font-size: 0.9rem; }
+  .texte a.lien {
+    display:inline-block; font-size: 0.83rem; color: #fff; background: var(--azur);
+    text-decoration: none; padding: 5px 12px; border-radius: 7px; font-weight:600; margin-right:6px;
+  }
+  .texte a.lien:hover { background: #094e96; }
+  .texte a.lien.pdf { background: var(--rouge); }
+  .texte a.lien.pdf:hover { background:#9c0d24; }
+
+  .subhead { font-weight:700; color:var(--bleu); font-size:0.95rem; margin: 18px 0 8px; padding-left: 10px; border-left: 4px solid var(--rouge); }
+  .index-num { font-family: monospace; font-weight: 700; color: var(--bleu); }
+  .note-encadre {
+    background: linear-gradient(#fff8e6,#fff3d6); border: 1px solid #f0d98c; border-radius: 10px;
+    padding: 13px 18px; font-size: 0.85rem; color: #6b5300; margin-bottom: 22px;
+  }
+  .toolbar { display:flex; gap:8px; margin-bottom:16px; }
+  .toolbar button {
+    background:#fff; border:1px solid #cbd5e1; color:var(--bleu); border-radius:8px;
+    padding:6px 14px; font-size:0.8rem; cursor:pointer; font-weight:600;
+  }
+  .toolbar button:hover { background:#f1f5fb; }
+  footer {
+    text-align: center; color: #64748b; font-size: 0.8rem; padding: 22px;
+    border-top: 3px solid; border-image: linear-gradient(90deg,#0055a4,#fff,#ef4135) 1;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="tricolore"><i></i><i></i><i></i></div>
+  <div class="header-inner">
+    <div class="emblemes">
+      <div class="embleme" title="Lycée professionnel Jean Mermoz - Béziers">
+        <svg width="120" height="46" viewBox="0 0 120 46" xmlns="http://www.w3.org/2000/svg" aria-label="LP Jean Mermoz Béziers">
+          <polygon points="6,42 6,10 18,4 18,42" fill="#00a0b0"/>
+          <polygon points="6,10 18,4 28,20 18,24" fill="#ef6a2e"/>
+          <polygon points="18,4 30,10 28,20" fill="#7a2fa3"/>
+          <polygon points="18,24 28,20 30,32 18,42" fill="#e0245e"/>
+          <polygon points="28,20 40,10 40,42 30,32" fill="#1f8a4c"/>
+          <polygon points="30,10 40,4 40,10" fill="#c8102e"/>
+          <text x="46" y="16" font-size="8" fill="#333" font-family="Arial">Lycée Pro</text>
+          <text x="46" y="38" font-size="20" fill="#111" font-family="Arial" font-weight="bold">ermoz</text>
+          <text x="46" y="46" font-size="6" fill="#333" font-family="Arial">Jean · BÉZIERS</text>
+        </svg>
+      </div>
+      <div class="embleme" title="Académie de Montpellier">
+        <svg width="120" height="46" viewBox="0 0 120 46" xmlns="http://www.w3.org/2000/svg" aria-label="Académie de Montpellier">
+          <rect x="4" y="6" width="26" height="17" fill="#f5f5f5" stroke="#ccc" stroke-width="0.5"/>
+          <rect x="4" y="6" width="8.6" height="17" fill="#0055a4"/>
+          <rect x="21.4" y="6" width="8.6" height="17" fill="#ef4135"/>
+          <path d="M12 10 q5 -3 9 0 q-4 5 -9 0" fill="#fff"/>
+          <text x="36" y="15" font-size="8.5" fill="#111" font-family="Arial" font-weight="bold">ACADÉMIE</text>
+          <text x="36" y="25" font-size="8.5" fill="#111" font-family="Arial" font-weight="bold">DE MONTPELLIER</text>
+          <text x="36" y="34" font-size="5.5" fill="#444" font-family="Arial" font-style="italic">Liberté</text>
+          <text x="36" y="40" font-size="5.5" fill="#444" font-family="Arial" font-style="italic">Égalité</text>
+          <text x="36" y="46" font-size="5.5" fill="#444" font-family="Arial" font-style="italic">Fraternité</text>
+        </svg>
+      </div>
+    </div>
+    <div class="header-titre">
+      <h1>Veille réglementaire hebdomadaire — Filières tertiaires</h1>
+      <p class="sub">Lycée professionnel Jean Mermoz · Béziers · Académie de Montpellier</p>
+      <p class="coord">Coordination : Yann Blin — enseignant en économie-gestion</p>
+    </div>
+  </div>
+  <div class="meta-bar">
+    <span id="lastUpdate">Édition en cours : —</span>
+    <span>🔄 Mise à jour automatique chaque vendredi</span>
+    <span>📚 Légifrance · education.gouv.fr · BOEN · Éduscol · Académie de Montpellier</span>
+  </div>
+  <div class="filieres-tags">
+    <span class="ft-mcv">Bac Pro MCV — Option A & B</span>
+    <span class="ft-epc">CAP Équipier Polyvalent du Commerce</span>
+    <span class="ft-acc">Bac Pro Métiers de l'Accueil</span>
+    <span class="ft-tr">Textes transversaux</span>
+  </div>
+</header>
+
+<main>
+
+  <div class="note-encadre">
+    ⚖️ Cette veille recense exclusivement des <strong>textes réglementaires officiels</strong> (arrêtés, décrets, notes de service, circulaires, BOEN) issus de sources institutionnelles. Chaque entrée renvoie vers la publication d'origine. <strong>Aucune source non officielle</strong> (blog, forum, site commercial) n'est retenue comme référence réglementaire.
+  </div>
+
+  <!-- ===== INDEX ===== -->
+  <section class="card accent-index">
+    <h2>🗂️ Index des éditions</h2>
+    <p class="lead">L'index s'incrémente chaque semaine — les éditions précédentes sont conservées. Chaque édition est repliable ci-dessous.</p>
+    <table>
+      <thead>
+        <tr><th>N°</th><th>Semaine</th><th>Contenu</th><th>Points clés</th></tr>
+      </thead>
+      <tbody id="indexBody">
+        <tr>
+          <td class="index-num">#002</td>
+          <td>Semaine du 22 juillet 2026</td>
+          <td>Rattrapage CAP EPC + veille BOEN/Légifrance de la semaine</td>
+          <td><a href="#edition-002">Arrêté du 8 avril 2026 (CAP EPC, bloc « Réceptionner et suivre les commandes ») · BO n°30 non encore paru · aucune nouvelle circulaire</a></td>
+        </tr>
+        <tr>
+          <td class="index-num">#001</td>
+          <td>Semaine du 20 juillet 2026</td>
+          <td>Référentiels des 4 filières + textes récents (transversal &amp; vie scolaire)</td>
+          <td><a href="#edition-001">Référentiels en ligne · Circulaire de rentrée 2026 · Interdiction du portable + vademecum · Engagement des élèves · Unités générales</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <div class="toolbar">
+    <button onclick="document.querySelectorAll('details.edition').forEach(d=>d.open=true)">▽ Tout déplier</button>
+    <button onclick="document.querySelectorAll('details.edition').forEach(d=>d.open=false)">△ Tout replier</button>
+  </div>
+
+  <!-- ===== ÉDITION 002 (REPLIABLE) ===== -->
+  <details class="edition" id="edition-002" open>
+    <summary>
+      <span class="chev">▶</span>
+      <span class="ed-num">#002</span>
+      <span class="ed-title">Rattrapage CAP EPC &amp; veille de la semaine</span>
+      <span class="ed-date">Semaine du 22 juillet 2026</span>
+    </summary>
+    <div class="edition-body">
+
+      <p class="lead">Recherches croisées Légifrance / education.gouv.fr (BOEN) / Éduscol / académie de Montpellier, avec recherche dédiée « circulaires » (rentrée, vie scolaire, harcèlement, laïcité, numérique). Le BO n°30 n'était pas encore paru à la date de cette édition ; aucune nouvelle circulaire n'a été repérée cette semaine au-delà de celles déjà recensées en édition #001 (circulaire de rentrée du 6 mai 2026 et circulaire du 2 juillet 2026 sur le téléphone portable, toujours d'actualité).</p>
+
+      <h3 class="groupe g-epc">CAP Équipier Polyvalent du Commerce (EPC)</h3>
+      <div class="texte t-epc">
+        <span class="badge b-epc">CAP EPC — Rattrapage</span><br>
+        <span class="ref">Arrêté du 8 avril 2026 (NOR MENE2606970A) — modifiant l'arrêté du 29 octobre 2019</span><span class="date">JORF n°97 du 24 avril 2026</span>
+        <p class="resume">Modifie les critères d'évaluation du bloc de compétences « Réceptionner et suivre les commandes » du CAP Équipier polyvalent du commerce. Ce texte, publié en avril 2026, n'avait pas été recensé dans l'édition #001 : il concerne directement l'évaluation en CCF de la filière EPC et doit être pris en compte dès la session 2026-2027.</p>
+        <a class="lien" href="https://www.legifrance.gouv.fr/loda/id/JORFTEXT000039402803" target="_blank" rel="noopener">Texte consolidé sur Légifrance (intègre la modification)</a>
+        <a class="lien" href="https://www.legifrance.gouv.fr/jorf/jo/2026/4/24/0097" target="_blank" rel="noopener">JORF n°97 du 24/04/2026</a>
+      </div>
+
+      <div class="subhead">🔎 Veille transversale de la semaine — aucun texte nouveau</div>
+      <div class="texte t-tr">
+        <span class="badge b-tr">Transversal</span><br>
+        <span class="ref">Sommaires vérifiés : BO n°29 (16 juillet 2026), recherches Légifrance (PFMP, CCF, examens)</span><span class="date">BOEN / Légifrance</span>
+        <p class="resume">Aucun nouvel arrêté, décret, note de service ou circulaire concernant la voie professionnelle, les PFMP, le CCF, l'organisation des examens ou la vie scolaire (règlement intérieur, laïcité, harcèlement, numérique) n'a été identifié depuis l'édition #001. Le BO n°30 n'était pas encore mis en ligne à la date de cette recherche ; il sera vérifié dès sa parution.</p>
+        <a class="lien" href="https://www.education.gouv.fr/bo/2026/Hebdo29-0" target="_blank" rel="noopener">BO n°29</a>
+        <a class="lien" href="https://www.legifrance.gouv.fr/" target="_blank" rel="noopener">Légifrance</a>
+      </div>
+
+      <div class="subhead">🔎 Bac Pro MCV &amp; Bac Pro Métiers de l'Accueil — aucun texte nouveau</div>
+      <div class="texte t-mcv">
+        <span class="badge b-mcv">MCV A &amp; B</span> <span class="badge b-acc">Accueil</span><br>
+        <span class="ref">Veille dédiée — aucune évolution réglementaire identifiée cette semaine</span>
+        <p class="resume">Aucune modification d'arrêté ou nouvelle note de service concernant le Bac Pro Métiers du Commerce et de la Vente (options A/B) ou le Bac Pro Métiers de l'Accueil n'a été trouvée sur Légifrance ou au BOEN depuis l'édition #001.</p>
+      </div>
+
+    </div>
+  </details>
+
+  <!-- ===== ÉDITION 001 (REPLIABLE) ===== -->
+  <details class="edition" id="edition-001">
+    <summary>
+      <span class="chev">▶</span>
+      <span class="ed-num">#001</span>
+      <span class="ed-title">Édition inaugurale — Référentiels &amp; actualité réglementaire</span>
+      <span class="ed-date">Semaine du 20 juillet 2026</span>
+    </summary>
+    <div class="edition-body">
+
+      <p class="lead">Documents de référence en vigueur (arrêtés + annexes Éduscol téléchargeables) et textes récents (depuis mai 2026).</p>
+
+      <h3 class="groupe g-mcv">Bac Pro Métiers du Commerce et de la Vente — Options A & B</h3>
+      <div class="texte t-mcv">
+        <span class="badge b-mcv">MCV A & B</span><br>
+        <span class="ref">Arrêté du 17 décembre 2018 (modifié) — Référentiel MCV</span>
+        <p class="resume">Crée la spécialité « Métiers du commerce et de la vente » (<strong>Option A</strong> : animation et gestion de l'espace commercial ; <strong>Option B</strong> : prospection clientèle et valorisation de l'offre commerciale). Référentiel d'activités et de certification dans les annexes Éduscol. Depuis la rentrée 2024, la PFMP totale est fixée à 20 semaines.</p>
+        <a class="lien" href="https://www.legifrance.gouv.fr/loda/id/JORFTEXT000037953057/" target="_blank" rel="noopener">Arrêté sur Légifrance</a>
+        <a class="lien pdf" href="https://referentiels-professionnels.eduscol.education.fr/BacPro_MetCoVe/Annexes_BacPro_MetCoVe.pdf" target="_blank" rel="noopener">📄 Référentiel en ligne (Éduscol)</a>
+      </div>
+
+      <h3 class="groupe g-epc">CAP Équipier Polyvalent du Commerce (EPC)</h3>
+      <div class="texte t-epc">
+        <span class="badge b-epc">CAP EPC</span><br>
+        <span class="ref">Arrêté du 29 octobre 2019 — Référentiel EPC</span>
+        <p class="resume">Crée la spécialité « Équipier polyvalent du commerce » de CAP. Activité en unité commerciale omnicanale : réception et suivi des commandes, mise en valeur et approvisionnement, conseil et accompagnement du client dans son parcours d'achat.</p>
+        <a class="lien" href="https://www.legifrance.gouv.fr/loda/id/JORFTEXT000039402803" target="_blank" rel="noopener">Arrêté sur Légifrance</a>
+        <a class="lien pdf" href="https://referentiels-professionnels.eduscol.education.fr/CAP_EPC/Annexes_CAP%20EPC191029.pdf" target="_blank" rel="noopener">📄 Référentiel en ligne (Éduscol)</a>
+      </div>
+
+      <h3 class="groupe g-acc">Bac Pro Métiers de l'Accueil</h3>
+      <div class="texte t-acc">
+        <span class="badge b-acc">Accueil</span><br>
+        <span class="ref">Arrêté du 17 décembre 2018 — Référentiel Métiers de l'accueil</span>
+        <p class="resume">Crée la spécialité « Métiers de l'accueil » du bac professionnel. Référentiel d'activités et de certification en annexes Ia/Ib ; unités constitutives et règlement d'examen en annexes IIa/IIb.</p>
+        <a class="lien" href="https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000037953040" target="_blank" rel="noopener">Arrêté sur Légifrance</a>
+        <a class="lien pdf" href="https://referentiels-professionnels.eduscol.education.fr/BacPro_MetAc/Annexes_BacPro_MetAc.pdf" target="_blank" rel="noopener">📄 Référentiel en ligne (Éduscol)</a>
+      </div>
+
+      <div class="subhead">🆕 Textes récents — depuis mai 2026 (transversal / vie scolaire)</div>
+
+      <div class="texte t-tr">
+        <span class="badge b-tr">Transversal — Vie scolaire</span><br>
+        <span class="ref">Circulaire de rentrée du 6 mai 2026 (NOR MENE2612348C) — Priorités pour l'année scolaire 2026-2027</span><span class="date">BO n°19 du 7 mai 2026</span>
+        <p class="resume">Circulaire cadre du ministre fixant les priorités de l'année : maîtrise du langage et du raisonnement scientifique, autorité de l'École, climat scolaire apaisé. Elle annonce explicitement l'interdiction du téléphone portable au lycée et rappelle les exigences de laïcité et de neutralité du service public — socle transversal de toute la vie scolaire au LP Mermoz pour 2026-2027.</p>
+        <a class="lien" href="https://www.education.gouv.fr/bo/2026/Hebdo19/MENE2612348C" target="_blank" rel="noopener">Consulter au BOEN</a>
+        <a class="lien" href="https://eduscol.education.gouv.fr/4323/circulaire-de-rentree" target="_blank" rel="noopener">Ressource Éduscol</a>
+      </div>
+
+      <div class="texte t-tr">
+        <span class="badge b-tr">Transversal — Vie scolaire</span><br>
+        <span class="ref">Circulaire du 2 juillet 2026 (NOR MENE2617958C) — Interdiction du téléphone portable au lycée</span><span class="date">BO n°27 du 2 juillet 2026</span>
+        <p class="resume">Étend au lycée l'interdiction de l'utilisation du téléphone portable et des autres objets connectés, dès la rentrée 2026. Un <strong>vademecum de 13 pages</strong> accompagne la circulaire : bases légales, dérogations possibles (CDI, restauration, internat), méthode de concertation avec le CVL et modèle de clause pour le règlement intérieur. Aucun décret ni loi n'existe à ce jour sur ce sujet — seule une proposition de loi est en cours d'examen à l'Assemblée nationale.</p>
+        <a class="lien" href="https://www.education.gouv.fr/bo/2026/Hebdo27/MENE2617958C" target="_blank" rel="noopener">Consulter au BOEN</a>
+        <a class="lien pdf" href="https://www.education.gouv.fr/sites/default/files/document/annexe-vademecum-interdiction-de-l-utilisation-du-telephone-portable-et-des-autres-objets-connectes_1.pdf" target="_blank" rel="noopener">📄 Vademecum (13 p., juin 2026)</a>
+        <a class="lien" href="https://eduscol.education.gouv.fr/5067/interdiction-du-telephone-portable-et-numerique-raisonne" target="_blank" rel="noopener">Ressource Éduscol</a>
+      </div>
+
+      <div class="texte t-tr">
+        <span class="badge b-tr">Transversal — Vie scolaire</span><br>
+        <span class="ref">Note de service du 30 juin 2026 (NOR MENE2613636N) — Engagement des élèves</span><span class="date">BO n°28 du 9 juillet 2026</span>
+        <p class="resume">« Développement de l'engagement des élèves dans et hors l'école » : cadre national pour les mandats de délégués, les semaines de l'engagement et la valorisation de l'engagement dans le livret scolaire et Parcoursup. Les absences liées aux instances de démocratie scolaire (CVL, conseils de classe…) ne doivent pas pénaliser les élèves engagés.</p>
+        <a class="lien" href="https://www.education.gouv.fr/bo/2026/Hebdo28/MENE2613636N" target="_blank" rel="noopener">Consulter au BOEN</a>
+      </div>
+
+      <div class="texte t-tr">
+        <span class="badge b-tr">Transversal — Examens</span><br>
+        <span class="ref">Note de service du 27 avril 2026 (NOR MENE2610273N)</span><span class="date">BO n°21 du 21 mai 2026</span>
+        <p class="resume">Modifie les supports d'évaluation et de notation des unités générales du baccalauréat professionnel. Concerne directement l'organisation des évaluations dans toutes les filières (MCV, EPC, Accueil).</p>
+        <a class="lien" href="https://www.education.gouv.fr/bo/2026/Hebdo21/MENE2610273N" target="_blank" rel="noopener">Consulter au BOEN</a>
+      </div>
+
+      <div class="texte t-tr">
+        <span class="badge b-tr">Transversal — Réforme</span><br>
+        <span class="ref">Arrêté du 22 avril 2026 (modifiant l'arrêté du 21 novembre 2018)</span><span class="date">applicable rentrée 2026</span>
+        <p class="resume">Fixe les enseignements dispensés dans les formations préparant au bac professionnel. Applicable à la rentrée 2026 pour les entrants en terminale. Volume de référence : 84 semaines d'enseignement, 20 de PFMP, 2 d'examen, 2 dédiées à l'insertion ou la poursuite d'études. <em>(Texte structurant conservé pour la rentrée.)</em></p>
+        <a class="lien" href="https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000054063222" target="_blank" rel="noopener">Consulter sur Légifrance</a>
+      </div>
+
+      <div class="texte t-tr">
+        <span class="badge b-tr">Transversal — Repères</span><br>
+        <span class="ref">Bulletins officiels n°19 (7 mai), n°20 (14 mai), n°27 (2 juillet), n°28 (9 juillet) &amp; n°29 (16 juillet) 2026</span><span class="date">BOEN</span>
+        <p class="resume">Points d'entrée officiels vérifiés semaine après semaine pour repérer les actes relatifs à l'organisation des examens, à la vie scolaire et à la voie professionnelle. Sommaires des n°28 et n°29 passés en revue cette semaine : aucun nouveau texte spécifique au Bac Pro MCV, au CAP EPC ou au Bac Pro Métiers de l'Accueil.</p>
+        <a class="lien" href="https://www.education.gouv.fr/bo/2026/Hebdo19" target="_blank" rel="noopener">BO n°19</a>
+        <a class="lien" href="https://www.education.gouv.fr/bo/2026/Hebdo20" target="_blank" rel="noopener">BO n°20</a>
+        <a class="lien" href="https://www.education.gouv.fr/bo/2026/Hebdo27" target="_blank" rel="noopener">BO n°27</a>
+        <a class="lien" href="https://www.education.gouv.fr/bo/2026/Hebdo28" target="_blank" rel="noopener">BO n°28</a>
+        <a class="lien" href="https://www.education.gouv.fr/bo/2026/Hebdo29-0" target="_blank" rel="noopener">BO n°29</a>
+      </div>
+
+    </div>
+  </details>
+
+  <!-- ===== MÉTHODE ===== -->
+  <section class="card accent-method">
+    <h2>🔎 Méthode &amp; périmètre</h2>
+    <p style="font-size:0.88rem; margin:0;">
+      Recherche automatisée chaque vendredi à 7h, limitée aux sources réglementaires officielles : Légifrance, <a href="https://www.education.gouv.fr" target="_blank" rel="noopener" style="color:var(--azur);">education.gouv.fr</a>, BOEN, Éduscol et publications de l'académie de Montpellier. Sont recensés les textes transversaux (réforme voie pro, PFMP, CCF, examens, vie scolaire — dont circulaires de rentrée, usage du numérique et téléphone portable) et les textes spécifiques au Bac Pro MCV (A/B), au CAP EPC et au Bac Pro Métiers de l'Accueil. Les <strong>circulaires</strong> sont recherchées systématiquement au même titre que les arrêtés, décrets et notes de service. Chaque nouvelle édition s'ajoute (repliable) sans écraser les précédentes. Le lien de cette page est stable : à épingler une seule fois sur Pearltrees, le contenu se met à jour tout seul.
+    </p>
+  </section>
+
+</main>
+
+<footer>
+  Veille coordonnée par Yann Blin — Lycée professionnel Jean Mermoz, Béziers · Académie de Montpellier<br>
+  <span style="font-size:0.72rem; opacity:0.8;">Emblèmes stylisés — à remplacer par les logos officiels une fois les fichiers image fournis.</span>
+</footer>
+
+<script>
+  document.getElementById('lastUpdate').textContent = 'Édition en cours : #002 — Semaine du 22 juillet 2026';
+</script>
+
+</body>
+</html>
