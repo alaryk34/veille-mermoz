@@ -65,7 +65,30 @@
   .ft-acc { background: var(--violet); }
   .ft-tr  { background: var(--or); color:#3a2a00; }
 
-  main { max-width: 1000px; margin: 0 auto; padding: 26px 20px 60px; }
+  main { max-width: 1240px; margin: 0 auto; padding: 26px 20px 60px; }
+
+  /* ===== MISE EN PAGE : index en marge + contenu ===== */
+  .layout { display: flex; gap: 26px; align-items: flex-start; }
+  .sidebar { flex: 0 0 250px; position: sticky; top: 18px; max-height: calc(100vh - 36px); overflow-y: auto; }
+  .content { flex: 1; min-width: 0; }
+  @media (max-width: 900px) {
+    .layout { display: block; }
+    .sidebar { position: static; max-height: none; width: 100%; margin-bottom: 22px; }
+  }
+
+  .index-list { list-style: none; margin: 10px 0 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+  .index-list li a {
+    display: block; padding: 8px 10px; border-radius: 9px; text-decoration: none;
+    color: inherit; border: 1px solid transparent;
+  }
+  .index-list li a:hover { background: #fff8e6; border-color: #f0d98c; }
+  .index-list .idx-num {
+    font-family: monospace; font-weight: 700; color: #fff; background: var(--bleu);
+    padding: 1px 8px; border-radius: 6px; font-size: 0.76rem; margin-right: 6px;
+  }
+  .index-list .idx-date { display: block; color: #7a8798; font-size: 0.72rem; margin: 3px 0 2px; }
+  .index-list .idx-title { display: block; font-size: 0.82rem; color: #1a2332; line-height: 1.35; }
+  .sidebar .toolbar { margin: 14px 0 0; flex-wrap: wrap; }
 
   /* ===== CARTES / ÉDITIONS REPLIABLES ===== */
   section.card, details.edition {
@@ -211,65 +234,51 @@
     ⚖️ Cette veille recense exclusivement des <strong>textes réglementaires officiels</strong> (arrêtés, décrets, notes de service, circulaires, BOEN) issus de sources institutionnelles. Chaque entrée renvoie vers la publication d'origine. <strong>Aucune source non officielle</strong> (blog, forum, site commercial) n'est retenue comme référence réglementaire.
   </div>
 
-  <!-- ===== INDEX ===== -->
-  <section class="card accent-index">
-    <h2>🗂️ Index des éditions</h2>
-    <p class="lead">L'index s'incrémente chaque semaine — les éditions précédentes sont conservées. Chaque édition est repliable ci-dessous.</p>
-    <table>
-      <thead>
-        <tr><th>N°</th><th>Semaine</th><th>Contenu</th><th>Points clés</th></tr>
-      </thead>
-      <tbody id="indexBody">
-        <tr>
-          <td class="index-num">#007</td>
-          <td>Semaine du 24 août 2026</td>
-          <td>Bulletin spécial n°2 — formation VSS (EVAR-S) &amp; calendrier des examens 2027</td>
-          <td><a href="#edition-007">Loi n° 2026-813 du 24-8-2026 (fondement légal de l'interdiction du téléphone portable au lycée, correction du 28/08) · Circulaire du 24-8-2026 sur la formation à la lutte contre les violences sexistes et sexuelles (EVAR-S) · Circulaire du 24-8-2026 fixant le calendrier 2027 des épreuves (bac pro, CAP) · BO n°31 et n°32 vérifiés, rien de spécifique MCV/EPC/Accueil</a></td>
-        </tr>
-        <tr>
-          <td class="index-num">#006</td>
-          <td>Semaine du 20 août 2026</td>
-          <td>Veille BOEN/Légifrance de la semaine</td>
-          <td><a href="#edition-006">Recherche circulaires dédiée sans nouveauté (rentrée, harcèlement, laïcité, numérique) · JORF vérifiés jusqu'au n°0192 (19/08) · BO n°31 toujours pas paru</a></td>
-        </tr>
-        <tr>
-          <td class="index-num">#005</td>
-          <td>Semaine du 14 août 2026</td>
-          <td>Veille BOEN/Légifrance de la semaine</td>
-          <td><a href="#edition-005">Arrêté du 31 juillet 2026 (JORF du 13/08) — livret scolaire bac pro, unité facultative « sensibilisation au secteur sportif » · recherche circulaires dédiée sans nouveauté · BO n°31 pas encore paru (annoncé le 20/08)</a></td>
-        </tr>
-        <tr>
-          <td class="index-num">#004</td>
-          <td>Semaine du 7 août 2026</td>
-          <td>Veille BOEN/Légifrance de la semaine</td>
-          <td><a href="#edition-004">Recherche circulaires dédiée + Légifrance (JORF fin juillet/début août) · aucun nouveau texte réglementaire pour les filières tertiaires ou la vie scolaire cette semaine</a></td>
-        </tr>
-        <tr>
-          <td class="index-num">#003</td>
-          <td>Semaine du 5 août 2026</td>
-          <td>Veille BOEN/Légifrance de la semaine</td>
-          <td><a href="#edition-003">Arrêté du 21 juillet 2026 — calendrier scolaire 2027-2028 · BO n°30 vérifié (rien de spécifique aux filières) · aucune nouvelle circulaire filière cette semaine</a></td>
-        </tr>
-        <tr>
-          <td class="index-num">#002</td>
-          <td>Semaine du 22 juillet 2026</td>
-          <td>Rattrapage CAP EPC + veille BOEN/Légifrance de la semaine</td>
-          <td><a href="#edition-002">Arrêté du 8 avril 2026 (CAP EPC, bloc « Réceptionner et suivre les commandes ») · BO n°30 non encore paru · aucune nouvelle circulaire</a></td>
-        </tr>
-        <tr>
-          <td class="index-num">#001</td>
-          <td>Semaine du 20 juillet 2026</td>
-          <td>Référentiels des 4 filières + textes récents (transversal &amp; vie scolaire)</td>
-          <td><a href="#edition-001">Référentiels en ligne · Circulaire de rentrée 2026 · Interdiction du portable + vademecum · Engagement des élèves · Unités générales</a></td>
-        </tr>
-      </tbody>
-    </table>
-  </section>
+  <div class="layout">
 
-  <div class="toolbar">
-    <button onclick="document.querySelectorAll('details.edition').forEach(d=>d.open=true)">▽ Tout déplier</button>
-    <button onclick="document.querySelectorAll('details.edition').forEach(d=>d.open=false)">△ Tout replier</button>
-  </div>
+  <!-- ===== INDEX (marge de gauche) ===== -->
+  <aside class="sidebar">
+    <section class="card accent-index">
+      <h2>🗂️ Index</h2>
+      <p class="lead">Chaque édition reste consultable ci-contre, repliable.</p>
+      <ul class="index-list" id="indexBody">
+        <li><a href="#edition-007">
+          <span class="idx-num">#007</span>Bulletin spécial n°2 — loi téléphone, EVAR-S, calendrier 2027
+          <span class="idx-date">Semaine du 24 août 2026</span>
+        </a></li>
+        <li><a href="#edition-006">
+          <span class="idx-num">#006</span>Veille de la semaine — aucun nouveau texte spécifique
+          <span class="idx-date">Semaine du 20 août 2026</span>
+        </a></li>
+        <li><a href="#edition-005">
+          <span class="idx-num">#005</span>Livret scolaire bac pro (unité sport)
+          <span class="idx-date">Semaine du 14 août 2026</span>
+        </a></li>
+        <li><a href="#edition-004">
+          <span class="idx-num">#004</span>Veille de la semaine — aucun nouveau texte
+          <span class="idx-date">Semaine du 7 août 2026</span>
+        </a></li>
+        <li><a href="#edition-003">
+          <span class="idx-num">#003</span>Calendrier scolaire 2027-2028
+          <span class="idx-date">Semaine du 5 août 2026</span>
+        </a></li>
+        <li><a href="#edition-002">
+          <span class="idx-num">#002</span>Rattrapage CAP EPC
+          <span class="idx-date">Semaine du 22 juillet 2026</span>
+        </a></li>
+        <li><a href="#edition-001">
+          <span class="idx-num">#001</span>Édition inaugurale — référentiels &amp; actualité
+          <span class="idx-date">Semaine du 20 juillet 2026</span>
+        </a></li>
+      </ul>
+      <div class="toolbar">
+        <button onclick="document.querySelectorAll('details.edition').forEach(d=>d.open=true)">▽ Tout déplier</button>
+        <button onclick="document.querySelectorAll('details.edition').forEach(d=>d.open=false)">△ Tout replier</button>
+      </div>
+    </section>
+  </aside>
+
+  <div class="content">
 
   <!-- ===== ÉDITION 007 (REPLIABLE) ===== -->
   <details class="edition" id="edition-007" open>
@@ -658,6 +667,10 @@
       Recherche automatisée chaque vendredi à 7h, limitée aux sources réglementaires officielles : Légifrance, <a href="https://www.education.gouv.fr" target="_blank" rel="noopener" style="color:var(--azur);">education.gouv.fr</a>, BOEN, Éduscol et publications de l'académie de Montpellier. Sont recensés les textes transversaux (réforme voie pro, PFMP, CCF, examens, vie scolaire — dont circulaires de rentrée, usage du numérique et téléphone portable) et les textes spécifiques au Bac Pro MCV (A/B), au CAP EPC et au Bac Pro Métiers de l'Accueil. Les <strong>circulaires</strong> sont recherchées systématiquement au même titre que les arrêtés, décrets et notes de service. <strong>Depuis l'édition #007 (correction du 28 août 2026)</strong> : une recherche <strong>Journal officiel / Légifrance dédiée aux lois</strong> est effectuée chaque semaine, indépendamment du sommaire du BOEN — une loi promulguée (ex. loi n° 2026-813 du 24 août 2026 sur le téléphone portable au lycée) n'apparaît en effet jamais dans les sommaires du BOEN, qui ne recense que les circulaires, arrêtés et notes de service du ministère. Une proposition ou un projet de loi en cours d'examen fait l'objet d'un suivi renforcé jusqu'à sa promulgation. Chaque nouvelle édition s'ajoute (repliable) sans écraser les précédentes. Le lien de cette page est stable : à épingler une seule fois sur Pearltrees, le contenu se met à jour tout seul.
     </p>
   </section>
+
+  </div><!-- /.content -->
+
+  </div><!-- /.layout -->
 
 </main>
 
